@@ -1,6 +1,6 @@
 //
 //  CustomHUD.h
-//  GGBannerViewDemo
+//  CustomHUD
 //
 //  Created by zhuochenming on 16/3/17.
 //  Copyright © 2016年 zhuochenming. All rights reserved.
@@ -11,14 +11,10 @@
 @interface CustomHUD : UIView
 
 #pragma mark - 展示
-+ (void)show;
+#pragma mark - 进度
++ (void)showProgress;
 
-+ (void)showWithStatus:(NSString *)status;
-
-//#pragma mark - 进度
-//+ (void)showProgress:(CGFloat)progress;
-//
-//+ (void)showProgress:(CGFloat)progress status:(NSString *)status;
++ (void)showProgressWithStatus:(NSString *)status;
 
 #pragma mark - 成功
 + (void)showSuccess;
