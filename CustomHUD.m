@@ -10,7 +10,9 @@
 
 #define ConBacColor [UIColor colorWithRed:214 / 255.0 green:214 / 255.0 blue:214 / 255.0 alpha:1]
 
-static CGFloat const HUDWidth = 150.0;
+static CGFloat const HUDOffset = 15.0;
+static CGFloat const HUDWidth = 230.0;
+static CGFloat const HUDHeight = 150.0;
 static CGFloat const HUDCircleWidth = 91.0;
 
 @interface CustomHUD ()
@@ -48,7 +50,7 @@ static CGFloat const HUDCircleWidth = 91.0;
     
     _statusLabel = [[UILabel alloc] init];
     _statusLabel.textAlignment = NSTextAlignmentCenter;
-    _statusLabel.textColor = [UIColor whiteColor];
+    _statusLabel.textColor = HUDTintColor;
     [_contentView addSubview:_statusLabel];
     
     [self addSubview:_contentView];
@@ -62,7 +64,7 @@ static CGFloat const HUDCircleWidth = 91.0;
     _contentView.backgroundColor = ConBacColor;
     
     _drawView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, (HUDWidth - HUDCircleWidth) / 2.0, HUDCircleWidth, HUDCircleWidth);
-    _contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - HUDWidth) / 2.0, HUDWidth, HUDWidth);
+    _contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - HUDWidth) / 2.0, HUDWidth, HUDHeight);
     
     return (HUDCircleWidth / 2.0f);
 }
@@ -75,13 +77,36 @@ static CGFloat const HUDCircleWidth = 91.0;
     _statusLabel.text = status;
     
     _drawView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, 10, HUDCircleWidth, HUDCircleWidth);
-    _statusLabel.frame = CGRectMake(0, CGRectGetMaxY(_drawView.frame), HUDWidth, HUDWidth - CGRectGetMaxY(_drawView.frame));
-    _contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - HUDWidth) / 2.0, HUDWidth, HUDWidth);
+    _statusLabel.frame = CGRectMake(0, CGRectGetMaxY(_drawView.frame), HUDWidth, HUDHeight - CGRectGetMaxY(_drawView.frame));
+    _contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - HUDHeight) / 2.0, HUDWidth, HUDHeight);
     
     return (HUDCircleWidth / 2.0f);
 }
 
+- (void)justHaveLableWithStatus:(NSString *)status {
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    
+    _contentView.backgroundColor = ConBacColor;
+    _statusLabel.text = status;
+    
+   CGFloat lableHeight = [self lableHeightWithString:status];
+    CGFloat viewHeight = lableHeight + 2 * HUDOffset;
+    
+    _statusLabel.frame = CGRectMake(0, HUDOffset, HUDWidth, lableHeight);
+    _contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - viewHeight) / 2.0, HUDWidth, viewHeight);
+}
+
+- (CGFloat)lableHeightWithString:(NSString *)string {
+    return [string boundingRectWithSize:_statusLabel.frame.size options:NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : _statusLabel.font} context:nil].size.height;
+}
+
 #pragma mark - 展示
++ (void)showWithStatus:(NSString *)status {
+    [[UIApplication sharedApplication].keyWindow addSubview:[self sharedView]];
+    [[self sharedView] justHaveLableWithStatus:status];
+}
+
 + (void)showProgress {
     [[UIApplication sharedApplication].keyWindow addSubview:[self sharedView]];
     CGFloat radius = [[self sharedView] haveNoLableSetup];
@@ -100,7 +125,7 @@ static CGFloat const HUDCircleWidth = 91.0;
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:center radius:(radius - 5) startAngle:-45.0f * (M_PI / 180) endAngle:275.0f * (M_PI / 180) clockwise:YES];
     
     self.circleProgressLayer.path = circlePath.CGPath;
-    self.circleProgressLayer.strokeColor = [UIColor lightGrayColor].CGColor;
+    self.circleProgressLayer.strokeColor = HUDTintColor.CGColor;
     self.circleProgressLayer.fillColor = color.CGColor;
     self.circleProgressLayer.lineWidth = 5;
     
@@ -146,7 +171,7 @@ static CGFloat const HUDCircleWidth = 91.0;
     CAShapeLayer *checkmarkLayer = [CAShapeLayer layer];
     checkmarkLayer.path = checkmarkPath.CGPath;
     checkmarkLayer.fillColor = nil;
-    checkmarkLayer.strokeColor = [UIColor greenColor].CGColor;
+    checkmarkLayer.strokeColor = HUDTintColor.CGColor;
     checkmarkLayer.lineWidth = 5;
     
     [self.drawView.layer addSublayer:self.circleProgressLayer];
@@ -155,17 +180,19 @@ static CGFloat const HUDCircleWidth = 91.0;
     [self.circleProgressLayer removeAllAnimations];
     [checkmarkLayer removeAllAnimations];
     [self.drawView.layer removeAllAnimations];
-    
-    CABasicAnimation *circleAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    circleAnimation.duration = 3.0;
-    circleAnimation.fromValue = @(0);
-    circleAnimation.toValue = @(1);
-    circleAnimation.fillMode = kCAFillModeBoth;
-    circleAnimation.removedOnCompletion = NO;
-    [self.circleProgressLayer addAnimation:circleAnimation forKey:@"appearance"];
+
+//    CABasicAnimation *circleAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+//    circleAnimation.duration = 1.0;
+//    circleAnimation.fromValue = @(0);
+//    circleAnimation.toValue = @(1);
+//    circleAnimation.fillMode = kCAFillModeForwards;
+//    circleAnimation.removedOnCompletion = NO;
+//    circleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+//
+//    [self.circleProgressLayer addAnimation:circleAnimation forKey:@"circleAnimation"];
     
     CABasicAnimation *checkmarkAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    checkmarkAnimation.duration = 1;
+    checkmarkAnimation.duration = 1.0;
     checkmarkAnimation.removedOnCompletion = NO;
     checkmarkAnimation.fillMode = kCAFillModeBoth;
     checkmarkAnimation.fromValue = @(0);
@@ -205,10 +232,10 @@ static CGFloat const HUDCircleWidth = 91.0;
     CAShapeLayer *crossLayer = [CAShapeLayer layer];
     crossLayer.path = crossPath.CGPath;
     crossLayer.fillColor = nil;
-    crossLayer.strokeColor = [UIColor redColor].CGColor;
+    crossLayer.strokeColor = HUDTintColor.CGColor;
     crossLayer.lineWidth = 5;
     
-    self.circleProgressLayer.strokeColor = [UIColor redColor].CGColor;
+    self.circleProgressLayer.strokeColor = HUDTintColor.CGColor;
     [self.drawView.layer addSublayer:self.circleProgressLayer];
     [self.drawView.layer addSublayer:crossLayer];
     
@@ -229,6 +256,12 @@ static CGFloat const HUDCircleWidth = 91.0;
     [[self sharedView] removeFromSuperview];
 }
 
++ (void)dismissAfterTime:(CGFloat)timeout {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self dismiss];
+    });
+}
+
 + (void)dismissWithCompletion:(void (^)(void))completion {
     [[self sharedView] removeFromSuperview];
     completion();
@@ -247,7 +280,7 @@ static CGFloat const HUDCircleWidth = 91.0;
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:center radius:(radius - 5) startAngle:-90.0f * (M_PI / 180) endAngle:275.0f * (M_PI / 180) clockwise:YES];
     
     self.circleProgressLayer.path = circlePath.CGPath;
-    self.circleProgressLayer.strokeColor = [UIColor greenColor].CGColor;
+    self.circleProgressLayer.strokeColor = HUDTintColor.CGColor;
     self.circleProgressLayer.fillColor = color.CGColor;
     self.circleProgressLayer.lineWidth = 5;
 }
