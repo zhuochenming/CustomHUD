@@ -151,17 +151,6 @@
 }
 
 #pragma mark - 配置
-- (void)justHaveLableWithStatus:(NSString *)status {
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
-    CGFloat lableHeight = [self lableHeightWithString:status];
-    CGFloat viewHeight = lableHeight + 2 * HUDOffset;
-    
-    self.statusLabel.text = status;
-    self.statusLabel.frame = CGRectMake(HUDLeftOffset, HUDOffset, HUDWidth - 2 * HUDLeftOffset, lableHeight);
-    _contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - viewHeight) / 2.0, HUDWidth, viewHeight);
-}
-
 - (CGFloat)haveNoLableSetup {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
@@ -195,13 +184,29 @@
 #pragma mark - 展示
 + (void)showWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
-    [contentView justHaveLableWithStatus:status];
+    
+    contentView.statusLabel.hidden = NO;
+    contentView.drawView.hidden = YES;
+    contentView.indicatorView.hidden = YES;
+
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat lableHeight = [contentView lableHeightWithString:status];
+    CGFloat viewHeight = lableHeight + 2 * HUDOffset;
+    
+    contentView.statusLabel.text = status;
+    contentView.statusLabel.frame = CGRectMake(HUDLeftOffset, HUDOffset, HUDWidth - 2 * HUDLeftOffset, lableHeight);
+    contentView.contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - viewHeight) / 2.0, HUDWidth, viewHeight);
     [[UIApplication sharedApplication].keyWindow addSubview:contentView];
 }
 
 + (void)showIndicator {
     CustomHUD *contentView = [self sharedView];
 
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = YES;
+    contentView.indicatorView.hidden = NO;
+    
     contentView.indicatorView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, 10, HUDCircleWidth, HUDCircleWidth);
     [contentView.indicatorView startAnimating];
     
@@ -213,6 +218,10 @@
 
 + (void)showIndicatorWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
+
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = YES;
+    contentView.indicatorView.hidden = NO;
 
     contentView.indicatorView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, HUDOffset, HUDCircleWidth, HUDCircleWidth);
     [contentView.indicatorView startAnimating];
@@ -232,6 +241,11 @@
 
 + (void)showProgress {
     CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = NO;
+    contentView.indicatorView.hidden = YES;
+    
     CGFloat radius = [contentView haveNoLableSetup];
     [contentView drawProgressCircleWithRadius:radius fillColor:ConBacColor];
     [[UIApplication sharedApplication].keyWindow addSubview:contentView];
@@ -239,6 +253,11 @@
 
 + (void)showProgressWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = NO;
+    contentView.indicatorView.hidden = YES;
+    
     CGFloat radius = [contentView haveLableSetupWithStatus:status];
     [contentView drawProgressCircleWithRadius:radius fillColor:ConBacColor];
     [[UIApplication sharedApplication].keyWindow addSubview:contentView];
@@ -274,6 +293,11 @@
 #pragma mark - 成功
 + (void)showSuccess {
     CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = NO;
+    contentView.indicatorView.hidden = YES;
+    
     CGFloat radius = [contentView haveNoLableSetup];
     [contentView drawSuccessWithRadius:radius color:ConBacColor];
     [[UIApplication sharedApplication].keyWindow addSubview:contentView];
@@ -281,6 +305,11 @@
 
 + (void)showSuccessWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = NO;
+    contentView.indicatorView.hidden = YES;
+    
     CGFloat radius = [contentView haveLableSetupWithStatus:status];
     [contentView drawSuccessWithRadius:radius color:ConBacColor];
     [[UIApplication sharedApplication].keyWindow addSubview:contentView];
@@ -335,6 +364,11 @@
 #pragma mark - 错误
 + (void)showError {
     CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = NO;
+    contentView.indicatorView.hidden = YES;
+    
     CGFloat radius = [contentView haveNoLableSetup];
     [contentView drawErrorWithRadius:radius color:ConBacColor];
     [[UIApplication sharedApplication].keyWindow addSubview:contentView];
@@ -342,6 +376,11 @@
 
 + (void)showErrorWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = YES;
+    contentView.drawView.hidden = NO;
+    contentView.indicatorView.hidden = YES;
+    
     CGFloat radius = [contentView haveLableSetupWithStatus:status];
     [contentView drawErrorWithRadius:radius color:ConBacColor];
     [[UIApplication sharedApplication].keyWindow addSubview:contentView];
