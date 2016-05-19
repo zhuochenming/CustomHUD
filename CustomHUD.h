@@ -8,12 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
-#define HUDTintColor [UIColor colorWithRed:71 / 255.0 green:192 / 255.0 blue:182 / 255.0 alpha:1]
+#define ConBacColor [UIColor colorWithRed:214 / 255.0 green:214 / 255.0 blue:214 / 255.0 alpha:1]
+#define HUDTintColor [UIColor lightGrayColor]
+
+static CGFloat const HUDOffset = 5.0;
+static CGFloat const HUDLeftOffset = 10.0;
+static CGFloat const HUDWidth = 130.0;
+static CGFloat const HUDHeight = 91.0;
+static CGFloat const HUDCircleWidth = 64.0;
+static CGFloat const HUDLineWidth = 3.0;
 
 @interface CustomHUD : UIView
 
 #pragma mark - 纯文本
 + (void)showWithStatus:(NSString *)status;
+
+#pragma mark - 进度
++ (void)showIndicator;
+
++ (void)showIndicatorWithStatus:(NSString *)status;
 
 #pragma mark - 进度
 + (void)showProgress;
