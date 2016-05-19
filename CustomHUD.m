@@ -219,9 +219,9 @@
 + (void)showIndicatorWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
 
-    contentView.statusLabel.hidden = YES;
-    contentView.drawView.hidden = YES;
-    contentView.indicatorView.hidden = NO;
+    contentView.statusLabel.hidden = NO;
+    contentView.drawView.hidden = NO;
+    contentView.indicatorView.hidden = YES;
 
     contentView.indicatorView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, HUDOffset, HUDCircleWidth, HUDCircleWidth);
     [contentView.indicatorView startAnimating];
@@ -254,7 +254,7 @@
 + (void)showProgressWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
     
-    contentView.statusLabel.hidden = YES;
+    contentView.statusLabel.hidden = NO;
     contentView.drawView.hidden = NO;
     contentView.indicatorView.hidden = YES;
     
@@ -306,7 +306,7 @@
 + (void)showSuccessWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
     
-    contentView.statusLabel.hidden = YES;
+    contentView.statusLabel.hidden = NO;
     contentView.drawView.hidden = NO;
     contentView.indicatorView.hidden = YES;
     
@@ -377,7 +377,7 @@
 + (void)showErrorWithStatus:(NSString *)status {
     CustomHUD *contentView = [self sharedView];
     
-    contentView.statusLabel.hidden = YES;
+    contentView.statusLabel.hidden = NO;
     contentView.drawView.hidden = NO;
     contentView.indicatorView.hidden = YES;
     
