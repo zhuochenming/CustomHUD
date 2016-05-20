@@ -155,6 +155,8 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
     
+    [self.drawView removeFromSuperview];
+    self.drawView = nil;
     self.drawView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, (HUDHeight - HUDCircleWidth) / 2.0, HUDCircleWidth, HUDCircleWidth);
     self.contentView.frame = CGRectMake((width - HUDWidth) / 2.0, (height - HUDHeight) / 2.0, HUDWidth, HUDHeight);
     
@@ -168,6 +170,8 @@
     self.statusLabel.text = status;
     CGFloat lableHeight = [self lableHeightWithString:status];
     
+    [self.drawView removeFromSuperview];
+    self.drawView = nil;
     self.drawView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, HUDOffset, HUDCircleWidth, HUDCircleWidth);
     self.statusLabel.frame = CGRectMake(HUDLeftOffset, CGRectGetMaxY(_drawView.frame) + HUDOffset, HUDWidth - 2 * HUDLeftOffset, lableHeight);
     
@@ -186,8 +190,9 @@
     CustomHUD *contentView = [self sharedView];
     
     contentView.statusLabel.hidden = NO;
-    contentView.drawView.hidden = YES;
-    contentView.indicatorView.hidden = YES;
+    [contentView.drawView removeFromSuperview];
+    contentView.drawView = nil;
+    [contentView.indicatorView stopAnimating];
 
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
@@ -204,8 +209,8 @@
     CustomHUD *contentView = [self sharedView];
 
     contentView.statusLabel.hidden = YES;
-    contentView.drawView.hidden = YES;
-    contentView.indicatorView.hidden = NO;
+    [contentView.drawView removeFromSuperview];
+    contentView.drawView = nil;
     
     contentView.indicatorView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, 10, HUDCircleWidth, HUDCircleWidth);
     [contentView.indicatorView startAnimating];
@@ -220,8 +225,8 @@
     CustomHUD *contentView = [self sharedView];
 
     contentView.statusLabel.hidden = NO;
-    contentView.drawView.hidden = NO;
-    contentView.indicatorView.hidden = YES;
+    [contentView.drawView removeFromSuperview];
+    contentView.drawView = nil;
 
     contentView.indicatorView.frame = CGRectMake((HUDWidth - HUDCircleWidth) / 2.0, HUDOffset, HUDCircleWidth, HUDCircleWidth);
     [contentView.indicatorView startAnimating];
@@ -243,8 +248,7 @@
     CustomHUD *contentView = [self sharedView];
     
     contentView.statusLabel.hidden = YES;
-    contentView.drawView.hidden = NO;
-    contentView.indicatorView.hidden = YES;
+    [contentView.indicatorView stopAnimating];
     
     CGFloat radius = [contentView haveNoLableSetup];
     [contentView drawProgressCircleWithRadius:radius fillColor:ConBacColor];
@@ -255,8 +259,7 @@
     CustomHUD *contentView = [self sharedView];
     
     contentView.statusLabel.hidden = NO;
-    contentView.drawView.hidden = NO;
-    contentView.indicatorView.hidden = YES;
+    [contentView.indicatorView stopAnimating];
     
     CGFloat radius = [contentView haveLableSetupWithStatus:status];
     [contentView drawProgressCircleWithRadius:radius fillColor:ConBacColor];
@@ -295,8 +298,7 @@
     CustomHUD *contentView = [self sharedView];
     
     contentView.statusLabel.hidden = YES;
-    contentView.drawView.hidden = NO;
-    contentView.indicatorView.hidden = YES;
+    [contentView.indicatorView stopAnimating];
     
     CGFloat radius = [contentView haveNoLableSetup];
     [contentView drawSuccessWithRadius:radius color:ConBacColor];
@@ -307,8 +309,7 @@
     CustomHUD *contentView = [self sharedView];
     
     contentView.statusLabel.hidden = NO;
-    contentView.drawView.hidden = NO;
-    contentView.indicatorView.hidden = YES;
+    [contentView.indicatorView stopAnimating];
     
     CGFloat radius = [contentView haveLableSetupWithStatus:status];
     [contentView drawSuccessWithRadius:radius color:ConBacColor];
@@ -366,8 +367,7 @@
     CustomHUD *contentView = [self sharedView];
     
     contentView.statusLabel.hidden = YES;
-    contentView.drawView.hidden = NO;
-    contentView.indicatorView.hidden = YES;
+    [contentView.indicatorView stopAnimating];
     
     CGFloat radius = [contentView haveNoLableSetup];
     [contentView drawErrorWithRadius:radius color:ConBacColor];
@@ -378,8 +378,7 @@
     CustomHUD *contentView = [self sharedView];
     
     contentView.statusLabel.hidden = NO;
-    contentView.drawView.hidden = NO;
-    contentView.indicatorView.hidden = YES;
+    [contentView.indicatorView stopAnimating];
     
     CGFloat radius = [contentView haveLableSetupWithStatus:status];
     [contentView drawErrorWithRadius:radius color:ConBacColor];
