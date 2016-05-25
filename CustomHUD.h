@@ -2,13 +2,13 @@
 //  CustomHUD.h
 //  CustomHUD
 //
-//  Created by zhuochenming on 16/3/17.
-//  Copyright © 2016年 zhuochenming. All rights reserved.
+//  Created by 酌晨茗 on 16/3/23.
+//  Copyright © 2016年 酌晨茗. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-#define ConBacColor [UIColor colorWithRed:214 / 255.0 green:214 / 255.0 blue:214 / 255.0 alpha:1]
+#define ConBacColor [UIColor colorWithRed:223 / 255.0 green:223 / 255.0 blue:223 / 255.0 alpha:1]
 #define HUDTintColor [UIColor lightGrayColor]
 
 static CGFloat const HUDOffset = 5.0;
@@ -32,6 +32,10 @@ static CGFloat const HUDLineWidth = 3.0;
 + (void)showProgress;
 
 + (void)showProgressWithStatus:(NSString *)status;
+
++ (void)showPhysicsProgress;
+
++ (void)showPhysicsProgressWithStatus:(NSString *)status;
 
 #pragma mark - 成功
 + (void)showSuccess;

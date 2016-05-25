@@ -2,8 +2,8 @@
 //  CustomHUD.m
 //  CustomHUD
 //
-//  Created by zhuochenming on 16/3/17.
-//  Copyright © 2016年 zhuochenming. All rights reserved.
+//  Created by 酌晨茗 on 16/3/23.
+//  Copyright © 2016年 酌晨茗. All rights reserved.
 //
 
 #import "CustomHUD.h"
@@ -291,6 +291,50 @@
     rotationAnimation.repeatCount = HUGE_VALF;
     
     [self.drawView.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+}
+
++ (void)showPhysicsProgress {
+    CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = YES;
+    [contentView.indicatorView stopAnimating];
+    
+    CGFloat radius = [contentView haveNoLableSetup];
+    [contentView drawPhysicsProgressCircleWithRadius:radius fillColor:ConBacColor];
+    [[UIApplication sharedApplication].keyWindow addSubview:contentView];
+}
+
++ (void)showPhysicsProgressWithStatus:(NSString *)status {
+    CustomHUD *contentView = [self sharedView];
+    
+    contentView.statusLabel.hidden = NO;
+    [contentView.indicatorView stopAnimating];
+    
+    CGFloat radius = [contentView haveLableSetupWithStatus:status];
+    [contentView drawPhysicsProgressCircleWithRadius:radius fillColor:ConBacColor];
+    [[UIApplication sharedApplication].keyWindow addSubview:contentView];
+}
+
+- (void)drawPhysicsProgressCircleWithRadius:(CGFloat)radius fillColor:(UIColor *)color {
+    UIBezierPath *beizPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(radius, radius) radius:(radius - 5.0) startAngle:-M_PI_2 endAngle:M_PI_2 clockwise:YES];
+    CAShapeLayer *layer = [CAShapeLayer layer];
+    layer.path = beizPath.CGPath;
+    layer.fillColor = [UIColor clearColor].CGColor;
+    layer.strokeColor = HUDTintColor.CGColor;
+    layer.lineWidth = HUDLineWidth;
+    layer.lineCap = kCALineCapRound;
+    [self.drawView.layer addSublayer:layer];
+    
+    [self.drawView.layer removeAllAnimations];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    animation.fromValue = @(0);
+    animation.toValue = @(M_PI * 2);
+    animation.duration = 0.7;
+    animation.repeatCount = HUGE;
+    animation.fillMode = kCAFillModeForwards;
+    animation.removedOnCompletion = NO;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.drawView.layer addAnimation:animation forKey:@"animation"];
 }
 
 #pragma mark - 成功
